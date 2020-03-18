@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "927942019512",
+    "firebase_url": "https://pethouse-d767b.firebaseio.com",
+    "project_id": "pethouse-d767b",
+    "storage_bucket": "pethouse-d767b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927942019512:android:3b4982d53635ef1dc5e74d",
+        "android_client_info": {
+          "package_name": "com.example.pethouse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927942019512-ogqcocsf13tedum1sep27cgohqq9jdu3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCh3mXeDP872zY_MnXEJ-PF0RZuWRQE01s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927942019512-ogqcocsf13tedum1sep27cgohqq9jdu3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
