@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/screens/authenticate/register.dart';
+import 'package:pethouse/screens/authenticate/sign_in.dart';
 
 class Authenticate extends StatefulWidget {
   @override
@@ -7,10 +8,18 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
+
+  bool showSinIn = true;
+  void toggleView() {
+    setState(() => showSinIn = !showSinIn);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Register(),
-    );
+    if (showSinIn){
+      return SingIn(toggleView: toggleView);
+    } else {
+      return Register(toggleView: toggleView);
+    }
   }
 }
