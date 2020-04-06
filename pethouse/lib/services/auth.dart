@@ -16,18 +16,6 @@ class AuthService {
     .map(_userFormFirebaseUser);
   }
 
-  //Anónimo
-  Future singInAnom() async{
-    try{
-      AuthResult result = await _auth.signInAnonymously();
-      FirebaseUser user = result.user;
-      return _userFormFirebaseUser(user);
-    } catch(e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
   //Iniciar sesión con correo y contraseña
   Future signInWithEmailAndPassword(String email, String password) async {
     try{
