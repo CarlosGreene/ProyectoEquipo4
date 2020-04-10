@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/services/auth.dart';
+import 'package:pethouse/shared/constants.dart';
+import 'package:pethouse/shared/loading.dart';
 
 class SingIn extends StatefulWidget {
 
@@ -14,13 +16,14 @@ class _SingInState extends State<SingIn> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
   
   //estado del campo de texto
   String email = '', password = '', error = '';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
@@ -44,6 +47,7 @@ class _SingInState extends State<SingIn> {
             children: <Widget> [
               SizedBox(height: 20.0,),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Correo'),
                 validator: (val) => val.isEmpty ? 'Escribe un correo': null,
                 onChanged: (val) {
                   setState(() => email = val);
@@ -51,6 +55,7 @@ class _SingInState extends State<SingIn> {
               ),
               SizedBox(height: 20.0),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Contaseña'),
                 validator: (val) => val.length < 6 ? 'Escribe una contraseña con más de 6 caractéres': null,
                 obscureText: true,
                 onChanged:(val) {
@@ -66,9 +71,13 @@ class _SingInState extends State<SingIn> {
                 ),
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
+                    setState(() => loading = true);
                     dynamic result = await _auth.signInWithEmailAndPassword(email, password); 
                     if(result == null){
-                      setState(() => error = 'Por favor, escribe un correo y/o contraseña válidos');
+                      setState(() { 
+                        error = 'Por favor, escribe un correo y/o contraseña válidos'; 
+                        loading = false;
+                      });
                     }
                   }
                 },

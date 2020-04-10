@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/services/auth.dart';
+import 'package:pethouse/shared/constants.dart';
+import 'package:pethouse/shared/loading.dart';
 
 class Register extends StatefulWidget {
 
@@ -14,12 +16,13 @@ class _RegisterState extends State<Register> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
   
   String email = '', password = '', error = '';
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
@@ -43,6 +46,7 @@ class _RegisterState extends State<Register> {
             children: <Widget> [
               SizedBox(height: 20.0,),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Correo'),
                 validator: (val) => val.isEmpty ? 'Escribe un correo': null,
                 onChanged: (val) {
                   setState(() => email = val);
@@ -50,6 +54,7 @@ class _RegisterState extends State<Register> {
               ),
               SizedBox(height: 20.0),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Contraseña'),
                 obscureText: true,
                 validator: (val) => val.length < 6 ? 'Escribe una contraseña con más de 6 caractéres': null,
                 onChanged:(val) {
@@ -65,9 +70,13 @@ class _RegisterState extends State<Register> {
                 ),
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
+                    setState(() => loading = true);
                     dynamic result = await _auth.registerWithEmailAndPassword(email, password);
                     if(result == null){
-                      setState(() => error = 'Por favor, escribe un correo válido');
+                      setState(() { 
+                        error = 'Por favor, escribe un correo válido';
+                        loading = false;
+                      });
                     }
                   }
                 },
