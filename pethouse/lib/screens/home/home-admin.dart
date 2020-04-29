@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/services/auth.dart';
 
-class Home extends StatelessWidget {
+class HomeAdmin extends StatelessWidget {
 
   final AuthService _auth = AuthService();
 
@@ -22,6 +22,9 @@ class Home extends StatelessWidget {
             },
           ),
         ],
+      ),
+      body: Container(
+        child: Text('Eres administrador'),
       ),
     );
   }

@@ -29,7 +29,7 @@ class AuthService {
     }
   }
 
-  //Redistrarse
+  //Registrarse
   Future registerWithEmailAndPassword(String email, String password) async {
     try{
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);

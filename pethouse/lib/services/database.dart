@@ -8,12 +8,9 @@ class DatabaseService{
   //Colección de referencias
   final CollectionReference brewCollection = Firestore.instance.collection('brews');
 
-  /*Future updateUserData(String sugars, String name, int strength) async {
+  Future updateUserData(String name) async {
     return await brewCollection.document(uid).setData({
-      'sugars' : sugars,
       'name' : name,
-      'strength' : strength,
     });
-  }*/
-
+  }
 }
