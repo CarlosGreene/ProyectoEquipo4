@@ -80,6 +80,7 @@ class _RegisterState extends State<Register> {
                     }
                   }
                 },
+                
               ),
               SizedBox(height: 12.0),
               Text(
