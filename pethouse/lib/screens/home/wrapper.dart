@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/screens/authenticate/authenticate.dart';
-import 'package:pethouse/screens/home/home-client.dart';
-import 'package:pethouse/screens/home/home-admin.dart';
+import 'package:pethouse/screens/home/home.dart';
 import 'package:provider/provider.dart';
 import 'package:pethouse/models/user.dart';
 
@@ -19,7 +18,7 @@ class Wrapper extends StatelessWidget {
     }
     else
     {
-      return HomeClient();
+      return Home();
     }
   }
 }

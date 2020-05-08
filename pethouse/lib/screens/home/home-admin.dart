@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/services/auth.dart';
 
-class HomeAdmin extends StatelessWidget {
+class HomeAdmin extends StatefulWidget {
+
+  final Function changeHome;
+  HomeAdmin ({this.changeHome});
+
+  @override
+  _HomeAdminState createState() => _HomeAdminState();
+}
+
+class _HomeAdminState extends State<HomeAdmin> {
 
   final AuthService _auth = AuthService();
 
@@ -21,10 +30,17 @@ class HomeAdmin extends StatelessWidget {
               await _auth.signOut();
             },
           ),
+          FlatButton.icon(
+            icon: Icon(Icons.arrow_back),
+            label: Text('regresar'),
+            onPressed: () {
+              widget.changeHome();
+            }
+          )
         ],
       ),
       body: Container(
-        child: Text('Eres administrador'),
+        child: Text('Eres Administrador'),
       ),
     );
   }
