@@ -6,9 +6,6 @@ import 'package:pethouse/shared/loading.dart';
 
 class HomeClient extends StatefulWidget {
 
-  final Function changeHome;
-  HomeClient ({this.changeHome});
-
   @override
   _HomeClientState createState() => _HomeClientState();
 }
@@ -17,7 +14,7 @@ class _HomeClientState extends State<HomeClient> {
 
   final AuthService _auth = AuthService();
   
-  String password = '', notice = '';
+  String password = '';
   bool loading = false;
 
   @override
@@ -50,6 +47,7 @@ class _HomeClientState extends State<HomeClient> {
 
   void logAdmin(){
     Navigator.of(context).push(MaterialPageRoute(builder: (context){
+      final _formKey = GlobalKey<FormState>();
       return loading ? Loading() : Scaffold(
         backgroundColor: Colors.brown[50],
         appBar: AppBar(
@@ -59,6 +57,7 @@ class _HomeClientState extends State<HomeClient> {
         body: Container(
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
           child: Form(
+            key: _formKey,
             child: Column(
               children: <Widget>[
                 SizedBox(height: 12.0),
@@ -80,22 +79,14 @@ class _HomeClientState extends State<HomeClient> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () async {
-                    if(password=='prototipo2020'){
-                      setState(() {
-                        loading = true;
-                        notice = 'Clave correcta apreta el botón de la flecha';
-                      });
-                      widget.changeHome();
-                    } else {
-                      setState(() {
-                        loading = false;
-                        notice = 'Clave incorrecta';
-                      });
-                    }
+                    if(_formKey.currentState.validate()){
+                      if (password == 'prototipo2020') {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => HomeAdmin()),);
+                      } else {
+                      }
+                    } 
                   },
                 ),
-                SizedBox(height: 12.0),
-                Text(notice, style: TextStyle(color: Colors.red, fontSize: 14.0),),
               ]
             ),
           ), 
@@ -103,5 +94,5 @@ class _HomeClientState extends State<HomeClient> {
       );
     }));
   }
-
 }
+
