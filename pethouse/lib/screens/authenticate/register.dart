@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pethouse/screens/home/home-client.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:pethouse/shared/constants.dart';
 import 'package:pethouse/shared/loading.dart';
@@ -23,15 +24,23 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Colors.brown[100],
+      backgroundColor: Colors.orange[100],
       appBar: AppBar(
-        backgroundColor: Colors.brown[400],
+        backgroundColor: Colors.orange[400],
         elevation: 0.0,
-        title: Text('Registrarse'),
+        title: Text('Registrarse',
+          style: TextStyle(
+            color: Colors.white
+          ),
+        ),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Iniciar sesión'),
+            label: Text('Iniciar sesión',
+              style: TextStyle(
+                color: Colors.white
+              ),
+            ),
             onPressed: () {
               widget.toggleView();
             }
@@ -61,6 +70,7 @@ class _RegisterState extends State<Register> {
                   setState(() => password = val);
                 }
               ),
+              
               SizedBox(height: 20.0),
               RaisedButton(
                 color: Colors.pink[400],
@@ -71,7 +81,7 @@ class _RegisterState extends State<Register> {
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
                     setState(() => loading = true);
-                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password); 
                     if(result == null){
                       setState(() { 
                         error = 'Por favor, escribe un correo válido';
