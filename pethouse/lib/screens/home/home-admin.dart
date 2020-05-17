@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/services/auth.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class Todo {
   final String title;
@@ -26,18 +27,50 @@ class _HomeAdminState extends State<HomeAdmin> {
       ),
   );
 
+  CalendarController _controller;
+  Map<DateTime,List<dynamic>> _events;
+  @override
+  void initState() {
+    super.initState();
+    _controller = CalendarController();
+    _events = {};
+  }
+
+  Map<String,dynamic> encodeMap(Map<DateTime,dynamic> map){
+    Map<String,dynamic> newMap = {};
+    map.forEach((key,value) {
+      newMap[key.toString()] = map[key];
+    });
+    return newMap;
+  }
+
+  Map<DateTime,dynamic> decodeMap(Map<String,dynamic> map){
+    Map<DateTime,dynamic> newMap = {};
+    map.forEach((key,value) {
+      newMap[DateTime.parse(key)] = map[key];
+    });
+    return newMap;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[50],
       appBar: AppBar(
-        title: Text('Administrador'),
-        backgroundColor: Colors.brown[400],
+        title: Text('Menú de Administrador',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         elevation: 0.0,
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Cerrar sesión'),
+            label: Text('Cerrar sesión',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
             onPressed: () async {
               await _auth.signOut();
             },

@@ -1,3 +1,4 @@
+import 'package:pethouse/screens/home/home-client.dart';
 import 'package:pethouse/screens/home/wrapper.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,12 @@ class MyApp extends StatelessWidget{
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
+        theme: ThemeData(
+        primarySwatch: Colors.orange,
+        primaryIconTheme: IconThemeData(
+          color: Colors.white
+          ),
+        ),
         home: Wrapper(),
       ),
     );

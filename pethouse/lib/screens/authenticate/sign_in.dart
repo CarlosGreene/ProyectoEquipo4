@@ -24,15 +24,23 @@ class _SingInState extends State<SingIn> {
   @override
   Widget build(BuildContext context) {
     return loading ? Loading() : Scaffold(
-      backgroundColor: Colors.brown[100],
+      backgroundColor: Colors.orange[100],
       appBar: AppBar(
-        backgroundColor: Colors.brown[400],
+        backgroundColor: Colors.orange[400],
         elevation: 0.0,
-        title: Text('Iniciar sesión'),
+        title: Text('Iniciar sesión',
+          style: TextStyle(
+            color: Colors.white
+          ),
+        ),
         actions: <Widget>[
           FlatButton.icon(
             icon: Icon(Icons.person),
-            label: Text('Registrarse'),
+            label: Text('Registrarse',
+              style: TextStyle(
+                color: Colors.white
+              ),
+            ),
             onPressed: () {
               widget.toggleView();
             }
