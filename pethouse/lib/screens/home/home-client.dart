@@ -1,10 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pethouse/screens/home/home-admin.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:pethouse/shared/constants.dart';
 import 'package:pethouse/shared/loading.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:provider/provider.dart';
+import 'package:pethouse/models/user.dart';
 
 class HomeClient extends StatefulWidget {
   @override
@@ -46,6 +48,7 @@ class _HomeClientState extends State<HomeClient> {
   @override
   Widget build(BuildContext context) {
     int _selectDrawerItem = 0;
+    final userName = Provider.of<UserName>(context);
 
     _onSelectedItem(int pos){
       Navigator.of(context).pop();
@@ -142,7 +145,9 @@ class _HomeClientState extends State<HomeClient> {
                 ),
                 trailing: new Icon(Icons.pageview),
                 selected: (5 == _selectDrawerItem),
-                onTap: logAdmin
+                onTap: () async {
+                  userName.type = !userName.type;
+                }
               ),
               new ListTile(
                 title: new Text('Cerrar Sesión',
@@ -232,7 +237,7 @@ class _HomeClientState extends State<HomeClient> {
     );
   }
 
-  void logAdmin(){
+  void loAdmin(){
     Navigator.of(context).push(MaterialPageRoute(builder: (context){
       final _formKey = GlobalKey<FormState>();
       return loading ? Loading() : Scaffold(
@@ -269,7 +274,6 @@ class _HomeClientState extends State<HomeClient> {
                     if(_formKey.currentState.validate()){
                       if (password == 'prototipo2020') {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => HomeAdmin()),);
-                      } else {
                       }
                     } 
                   },

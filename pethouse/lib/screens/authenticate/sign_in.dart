@@ -17,8 +17,6 @@ class _SingInState extends State<SingIn> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-  
-  //estado del campo de texto
   String email = '', password = '', error = '';
 
   @override
@@ -90,7 +88,28 @@ class _SingInState extends State<SingIn> {
                   }
                 },
               ),
-               SizedBox(height: 12.0),
+              SizedBox(height: 20.0),
+              RaisedButton(
+                color: Colors.pink[400],
+                child: Text(
+                  'Iniciar como adminidtrador',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {    
+                  setState(() { 
+                    loading = true;
+                  
+                  });
+                  dynamic result = await _auth.signInWithEmailAndPasswordAdmin(email, password); 
+                  if(result == null){
+                    setState(() { 
+                      error = 'Por favor, escribe un correo y/o contraseña válidos'; 
+                      loading = false;
+                    });
+                  }              
+                }
+              ),
+              SizedBox(height: 12.0),
               Text(
                 error,
                 style: TextStyle(color: Colors.red, fontSize: 14.0),
