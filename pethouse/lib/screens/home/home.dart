@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pethouse/screens/authenticate/logAdmin.dart';
+import 'package:pethouse/screens/home/logAdmin.dart';
 import 'package:pethouse/screens/home/home-client.dart';
-import 'package:pethouse/models/client.dart';
+
 
 class Home extends StatefulWidget {
 
@@ -11,27 +11,18 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   
-  final Client client;
-  _HomeState({this.client});
-
-  bool showHome = false;
+  bool aux= true;
   void changeHome(){
-    setState(() {
-      showHome = true;
-    });
+    setState(() => aux = !aux);
   }
 
   @override
   Widget build(BuildContext context) {
 
-    if () {
-      
-    }
-
-    if (client.type) {
-      return HomeClient();
+    if (aux) {
+      return HomeClient(changeHome: changeHome);
     }else{
-      return LogAdmin();
+      return LogAdmin(changeHome: changeHome);
     }
   }
 }

@@ -29,26 +29,26 @@ class AuthService {
     }
   }
 
-   Future signInWithEmailAndPasswordAdmin(String email, String password) async {
+   /*Future signInWithEmailAndPasswordAdmin(String email, String password) async {
     try{
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
-      await DatabaseService(uid: user.uid).updateUserData('', 0, true);
+      await DatabaseService(uid: user.uid).updateUserData('desconocido', 0, false);
       return _userFormFirebaseUser(user);
     }catch(e){
       print(e.toString());
       return null;
     }
-  }
+  }*/
 
   //Registrarse
-  Future registerWithEmailAndPassword(String email, String password) async {
+  Future registerWithNameEmailAndPassword(String name, String email, String password) async {
     try{
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
-      await DatabaseService(uid: user.uid).updateUserData('', 0, false);
+      await DatabaseService(uid: user.uid).updateUserData(name, email, password);
       return _userFormFirebaseUser(user);
     }catch(e){
       print(e.toString());

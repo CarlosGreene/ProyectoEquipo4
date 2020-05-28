@@ -6,13 +6,24 @@ class User {
   
 }
 
+class UserData{
+
+  final String uid;
+  final String name;
+  final String email;
+  final String password;
+
+  UserData({ this.uid, this.name, this.email, this.password });
+
+}
+
 class UserName {
 
   String email;
   String password;
   String nickname;
-  bool type = true;
 
-  UserName({ this.email, this.password, this.type ,this.nickname });
+  UserName({ this.email, this.password, this.nickname });
 
-}
+} 
+

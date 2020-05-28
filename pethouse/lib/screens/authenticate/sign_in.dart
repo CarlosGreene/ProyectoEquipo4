@@ -6,7 +6,8 @@ import 'package:pethouse/shared/loading.dart';
 class SingIn extends StatefulWidget {
 
   final Function toggleView;
-  SingIn({this.toggleView});
+  SingIn({ this.toggleView });
+
 
   @override
   _SingInState createState() => _SingInState();
@@ -77,7 +78,9 @@ class _SingInState extends State<SingIn> {
                 ),
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
-                    setState(() => loading = true);
+                    setState(() { 
+                      loading = true; 
+                    });
                     dynamic result = await _auth.signInWithEmailAndPassword(email, password); 
                     if(result == null){
                       setState(() { 
@@ -98,9 +101,8 @@ class _SingInState extends State<SingIn> {
                 onPressed: () async {    
                   setState(() { 
                     loading = true;
-                  
                   });
-                  dynamic result = await _auth.signInWithEmailAndPasswordAdmin(email, password); 
+                  dynamic result = await _auth.signInWithEmailAndPassword(email, password); 
                   if(result == null){
                     setState(() { 
                       error = 'Por favor, escribe un correo y/o contraseña válidos'; 

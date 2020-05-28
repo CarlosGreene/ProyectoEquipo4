@@ -19,7 +19,7 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
   
-  String email = '', password = '', error = '';
+  String email = '', password = '', name = '', error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +55,14 @@ class _RegisterState extends State<Register> {
             children: <Widget> [
               SizedBox(height: 20.0,),
               TextFormField(
+                decoration: textInputDecoration.copyWith(hintText: 'Nombre completo'),
+                validator: (val) => val.isEmpty ? 'Escribe tu nombre completo':  null,
+                onChanged: (val) {
+                  setState(() => name = val);
+                },
+              ),
+              SizedBox(height: 20.0,),
+              TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Correo'),
                 validator: (val) => val.isEmpty ? 'Escribe un correo': null,
                 onChanged: (val) {
@@ -81,7 +89,7 @@ class _RegisterState extends State<Register> {
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
                     setState(() => loading = true);
-                    dynamic result = await _auth.registerWithEmailAndPassword(email, password); 
+                    dynamic result = await _auth.registerWithNameEmailAndPassword(name, email, password); 
                     if(result == null){
                       setState(() { 
                         error = 'Por favor, escribe un correo válido';

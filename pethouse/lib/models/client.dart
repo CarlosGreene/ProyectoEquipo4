@@ -1,9 +1,8 @@
 class Client{
 
-  final String animal;
-  final int age;
-  final bool type;
+  final String name;
+  final String email;
+  final String password;
 
-  Client({ this.animal, this.age, this.type });
-
+  Client({ this.name, this.email, this.password });
 }
