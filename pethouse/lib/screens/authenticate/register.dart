@@ -78,7 +78,6 @@ class _RegisterState extends State<Register> {
                   setState(() => password = val);
                 }
               ),
-              
               SizedBox(height: 20.0),
               RaisedButton(
                 color: Colors.pink[400],
@@ -89,7 +88,27 @@ class _RegisterState extends State<Register> {
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
                     setState(() => loading = true);
-                    dynamic result = await _auth.registerWithNameEmailAndPassword(name, email, password); 
+                    dynamic result = await _auth.registerWithNameEmailAndPasswordClient(name, email, password); 
+                    if(result == null){
+                      setState(() { 
+                        error = 'Por favor, escribe un correo válido';
+                        loading = false;
+                      });
+                    }
+                  }
+                },               
+              ),
+              SizedBox(height: 20.0),
+              RaisedButton(
+                color: Colors.pink[400],
+                child: Text(
+                  'Registrarse como adminstrador',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {
+                  if(_formKey.currentState.validate()){
+                    setState(() => loading = true);
+                    dynamic result = await _auth.registerWithEmailAndPasswordAdmin(name, email, password); 
                     if(result == null){
                       setState(() { 
                         error = 'Por favor, escribe un correo válido';

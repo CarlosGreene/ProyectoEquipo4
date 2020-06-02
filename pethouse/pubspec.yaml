@@ -29,6 +29,7 @@ dependencies:
   flutter_spinkit: ^4.1.2
   table_calendar: ^2.2.3
   firebase_core: ^0.4.4+3
+  flutter_local_notifications: ^1.4.3
 
 dev_dependencies:
   flutter_test:

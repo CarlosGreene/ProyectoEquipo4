@@ -10,11 +10,12 @@ class DatabaseService{
   //Colección de referencias
   final CollectionReference clientCollection = Firestore.instance.collection('clients');
 
-  Future updateUserData(String name, String email, String password) async {
+  Future updateUserData(String name, String email, String password, bool client) async {
     return await clientCollection.document(uid).setData({
       'name' : name,
       'email' : email,
       'password' : password,
+      'client' : client
     });
   }
 
@@ -25,6 +26,7 @@ class DatabaseService{
         name: doc.data['name'] ?? '',
         email: doc.data['email'] ?? '',
         password: doc.data['password'] ?? '',
+        client: doc.data['client'] ?? false,
       );
     }).toList();
   }
@@ -36,6 +38,7 @@ class DatabaseService{
       name: snapshot.data['name'],
       email: snapshot.data['email'],
       password: snapshot.data['password'],
+      client: snapshot.data['client'],
     );
   }
 

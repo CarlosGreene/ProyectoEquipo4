@@ -91,26 +91,6 @@ class _SingInState extends State<SingIn> {
                   }
                 },
               ),
-              SizedBox(height: 20.0),
-              RaisedButton(
-                color: Colors.pink[400],
-                child: Text(
-                  'Iniciar como adminidtrador',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {    
-                  setState(() { 
-                    loading = true;
-                  });
-                  dynamic result = await _auth.signInWithEmailAndPassword(email, password); 
-                  if(result == null){
-                    setState(() { 
-                      error = 'Por favor, escribe un correo y/o contraseña válidos'; 
-                      loading = false;
-                    });
-                  }              
-                }
-              ),
               SizedBox(height: 12.0),
               Text(
                 error,

@@ -19,9 +19,6 @@ class _HomeClientState extends State<HomeClient> {
 
   final AuthService _auth = AuthService();
   
-  String password = '';
-  bool loading = false;
-
   CalendarController _controller;
   Map<DateTime,List<dynamic>> _events;
   @override
@@ -153,7 +150,8 @@ class _HomeClientState extends State<HomeClient> {
                     trailing: new Icon(Icons.pageview),
                     selected: (5 == _selectDrawerItem),
                     onTap: () async {
-                      widget.changeHome();
+                      await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.client);
+                      await widget.changeHome();
                     }
                   ),
                   new ListTile(
