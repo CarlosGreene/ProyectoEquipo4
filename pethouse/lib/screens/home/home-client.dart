@@ -7,10 +7,7 @@ import 'package:pethouse/models/user.dart';
 import 'package:provider/provider.dart';
 
 class HomeClient extends StatefulWidget {
-
-  final Function changeHome;
-  HomeClient ({ this.changeHome });
-
+  
   @override
   _HomeClientState createState() => _HomeClientState();
 }
@@ -150,8 +147,8 @@ class _HomeClientState extends State<HomeClient> {
                     trailing: new Icon(Icons.pageview),
                     selected: (5 == _selectDrawerItem),
                     onTap: () async {
-                      await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.client);
-                      await widget.changeHome();
+                      await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.admin);
+                      //await widget.changeHome();
                     }
                   ),
                   new ListTile(

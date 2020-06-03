@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:pethouse/shared/constants.dart';
-import 'package:pethouse/screens/home/home-admin.dart';
 import 'package:pethouse/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:pethouse/services/database.dart';
 
 class LogAdmin extends StatefulWidget {
 
-  final Function changeHome;
-  LogAdmin ({ this.changeHome });
+  final Function goAdmin;
+  LogAdmin ({ this.goAdmin });
 
   @override
   _LogAdminState createState() => _LogAdminState();
@@ -42,8 +41,8 @@ class _LogAdminState extends State<LogAdmin> {
                     ),
                   ),
                   onPressed: () async {
-                    await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.client);
-                    await widget.changeHome();
+                    await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.admin);
+                    //await widget.changeHome();
                   }, 
                 ),
               ],
@@ -75,7 +74,7 @@ class _LogAdminState extends State<LogAdmin> {
                       onPressed: () async {
                         if(_formKey.currentState.validate()){
                           if (password == 'prototipo2020') {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeAdmin()),);
+                            await widget.goAdmin();
                           }
                         } 
                       },

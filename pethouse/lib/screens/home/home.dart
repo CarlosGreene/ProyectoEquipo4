@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pethouse/screens/home/home-admin.dart';
 import 'package:pethouse/screens/home/logAdmin.dart';
 import 'package:pethouse/screens/home/home-client.dart';
 import 'package:pethouse/models/user.dart';
@@ -13,9 +14,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   
-  bool aux = true;
-  void changeHome(){
-    setState(() => aux = !aux);
+  bool aux2 = true;
+  void goAdmin(){
+    setState(() => aux2 = !aux2);
   }
 
   @override
@@ -27,10 +28,15 @@ class _HomeState extends State<Home> {
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot){
         UserData userData = snapshot.data;
-          if (userData.client==false) {  
-            return HomeClient(changeHome: changeHome);
+          if (userData.admin==true) {  
+            return HomeClient();
           }else{
-            return LogAdmin(changeHome: changeHome);
+            if (aux2==true) {
+              return LogAdmin(goAdmin: goAdmin);
+            } else {
+              return HomeAdmin(goAdmin: goAdmin);
+            }
+            
         }
       }
     );

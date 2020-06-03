@@ -14,6 +14,9 @@ class Todo {
 
 class HomeAdmin extends StatefulWidget {
 
+  final Function goAdmin;
+  HomeAdmin({ this.goAdmin });
+
   @override
   _HomeAdminState createState() => _HomeAdminState();
 }
@@ -85,6 +88,12 @@ class _HomeAdminState extends State<HomeAdmin> {
                   await _auth.signOut();
                 },
               ),
+              IconButton(
+                  icon: Icon(Icons.pageview), 
+                  onPressed: () async {
+                    await widget.goAdmin();
+                  }
+                )
             ],
           ),
           body: ListView.builder(
