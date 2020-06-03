@@ -1,4 +1,6 @@
 //import 'package:pethouse/screens/home/home-client.dart';
+import 'package:pethouse/screens/home/add_event.dart';
+import 'package:pethouse/screens/home/view_event.dart';
 import 'package:pethouse/screens/home/wrapper.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,9 @@ class MyApp extends StatelessWidget {
           primaryIconTheme: IconThemeData(color: Colors.white),
         ),
         home: Wrapper(),
+        routes: {
+        "add_event": (_) => AddEventPage(),
+        },
       ),
     );
   }
