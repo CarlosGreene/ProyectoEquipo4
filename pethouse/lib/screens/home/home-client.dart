@@ -9,10 +9,7 @@ import 'package:pethouse/red/event_firestore_service.dart';
 import 'package:pethouse/screens/home/view_event.dart';
 
 class HomeClient extends StatefulWidget {
-
-  final Function changeHome;
-  HomeClient ({ this.changeHome });
-
+  
   @override
   _HomeClientState createState() => _HomeClientState();
 }

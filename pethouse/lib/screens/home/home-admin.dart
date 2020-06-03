@@ -138,7 +138,6 @@ class _HomeAdminState extends State<HomeAdmin> {
                     trailing: new Icon(Icons.supervised_user_circle),
                     selected: (3 == _selectDrawerItem),
                     onTap: (){
-                      await widget.goAdmin();
                       _onSelectedItem(0);
                     },
                   ),
