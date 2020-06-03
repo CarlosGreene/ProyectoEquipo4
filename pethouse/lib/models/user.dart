@@ -12,9 +12,9 @@ class UserData{
   final String name;
   final String email;
   final String password;
-  final bool client;
+  final bool admin;
 
-  UserData({ this.uid, this.name, this.email, this.password, this.client });
+  UserData({ this.uid, this.name, this.email, this.password, this.admin });
 
 }
 

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:pethouse/screens/home/view_admin.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:pethouse/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:pethouse/services/database.dart';
+import 'package:pethouse/models/event.dart';
+import 'package:pethouse/red/event_firestore_service.dart';
 
 class Todo {
   final String title;
@@ -14,6 +17,8 @@ class Todo {
 
 class HomeAdmin extends StatefulWidget {
 
+  final Function goAdmin;
+  HomeAdmin({ this.goAdmin });
   @override
   _HomeAdminState createState() => _HomeAdminState();
 }
@@ -21,7 +26,7 @@ class HomeAdmin extends StatefulWidget {
 class _HomeAdminState extends State<HomeAdmin> {
 
   final AuthService _auth = AuthService();
-  
+
   final todos = List<Todo>.generate(
   20,
   (i) => Todo(
@@ -30,33 +35,36 @@ class _HomeAdminState extends State<HomeAdmin> {
       ),
   );
 
+
   CalendarController _controller;
   Map<DateTime,List<dynamic>> _events;
+  List<dynamic>_selectedEvents;
   @override
   void initState() {
     super.initState();
     _controller = CalendarController();
     _events = {};
+    _selectedEvents = [];
   }
-
-  Map<String,dynamic> encodeMap(Map<DateTime,dynamic> map){
-    Map<String,dynamic> newMap = {};
-    map.forEach((key,value) {
-      newMap[key.toString()] = map[key];
+  Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
+    Map<DateTime, List<dynamic>> data = {};
+    allEvents.forEach((event) {
+      DateTime date = DateTime(
+          event.eventDate.year, event.eventDate.month, event.eventDate.day, 12);
+      if (data[date] == null) data[date] = [];
+      data[date].add(event);
     });
-    return newMap;
+    return data;
   }
-
-  Map<DateTime,dynamic> decodeMap(Map<String,dynamic> map){
-    Map<DateTime,dynamic> newMap = {};
-    map.forEach((key,value) {
-      newMap[DateTime.parse(key)] = map[key];
-    });
-    return newMap;
-  }
-
   @override
   Widget build(BuildContext context) {
+    int _selectDrawerItem = 0;
+
+    _onSelectedItem(int pos){
+      Navigator.of(context).pop();
+      setState(() {
+      });
+    }
 
     final user = Provider.of<User>(context);
 
@@ -65,85 +73,186 @@ class _HomeAdminState extends State<HomeAdmin> {
       builder: (context, snapshot) {
         UserData userData = snapshot.data;
         return Scaffold(
-          backgroundColor: Colors.brown[50],
+          backgroundColor: Colors.white,
           appBar: AppBar(
-            title: Text('Menú de Administrador',
+            title: const Text(
+              'Menú de Administrador',
               style: TextStyle(
                 color: Colors.white,
               ),
+              textAlign: TextAlign.right
             ),
-            elevation: 0.0,
-            actions: <Widget>[
-              FlatButton.icon(
-                icon: Icon(Icons.person),
-                label: Text('Cerrar sesión',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () async {
-                  await _auth.signOut();
-                },
-              ),
-            ],
           ),
-          body: ListView.builder(
-            itemCount: todos.length,
-            itemBuilder: (context, index) {
-              return Dismissible(
-                // Cada Dismissible debe contener una llave. Las llaves permiten a Flutter
-                // identificar de manera única los Widgets.
-                key: Key(todos[index].title),
-                // También debemos proporcionar una función que diga a nuestra aplicación
-                // qué hacer después de que un elemento ha sido eliminado.
-                onDismissed: (direction) {
-                  // Remueve el elemento de nuestro data source.
-                  setState(() {
-                    todos.removeAt(index);
-                  });
-                },
-                background: Container(color: Colors.red),
-                child: ListTile(
-                  title: Text(todos[index].title),
-                  // Cuando un usuario pulsa en el ListTile, navega al DetailScreen.
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => view(todos[index]),
+          drawer: new Drawer(
+              child: new ListView(
+                children: <Widget>[
+                  new UserAccountsDrawerHeader(
+                    accountName: new Text(userData.name,
+                      style: TextStyle(
+                        color: Colors.white
                       ),
-                    );
-                  },
-                ),
-              );
-            },
+                    ),
+                    accountEmail: new Text(userData.email,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.0
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      image: new DecorationImage(
+                        fit: BoxFit.fill,
+                        image: new NetworkImage("https://i.pinimg.com/originals/58/f6/9a/58f69a16b34e9864353070c745bd73b2.jpg")
+                      )
+                    ),
+                  ),
+                  new ListTile(
+                    title: new Text('Calendario',
+                      style: TextStyle(
+                        fontSize: 20.0
+                      ),
+                    ),
+                    trailing: new Icon(Icons.calendar_today),
+                    selected: (1 == _selectDrawerItem),
+                    onTap: (){
+                      _onSelectedItem(0);
+                    },
+                  ),
+                  new ListTile(
+                    title: new Text('Mensajes',
+                      style: TextStyle(
+                        fontSize: 20.0
+                      ),
+                    ),
+                    trailing: new Icon(Icons.message),
+                    selected: (2 == _selectDrawerItem),
+                    onTap: (){
+                      _onSelectedItem(0);
+                    },
+                  ),
+                  new ListTile(
+                    title: new Text('Volver a Menú de Usuario',
+                      style: TextStyle(
+                        fontSize: 20.0
+                      ),
+                    ),
+                    trailing: new Icon(Icons.supervised_user_circle),
+                    selected: (3 == _selectDrawerItem),
+                    onTap: (){
+                      await widget.goAdmin();
+                      _onSelectedItem(0);
+                    },
+                  ),
+                  new ListTile(
+                    title: new Text('Cerrar Sesión',
+                      style: TextStyle(
+                        fontSize: 20.0
+                      ),
+                    ),
+                    trailing: new Icon(Icons.exit_to_app),
+                    selected: (4 ==_selectDrawerItem),
+                    onTap: () async {
+                      await _auth.signOut();
+                      _onSelectedItem(0);
+                    },
+                  ),
+                ],
+            ),
           ),
+          body: StreamBuilder<List<EventModel>>(
+          stream: eventDBS.streamList(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<EventModel> allEvents = snapshot.data;
+              if (allEvents.isNotEmpty) {
+                _events = _groupEvents(allEvents);
+              } else {
+                _events = {};
+                _selectedEvents = [];
+              }
+            }
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TableCalendar(
+                    events: _events,
+                    initialCalendarFormat: CalendarFormat.month,
+                    calendarStyle: CalendarStyle(
+                      todayColor: Colors.red[300],
+                      selectedColor: Theme.of(context).primaryColor,
+                      todayStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                        color: Colors.white,
+                      )
+                    ),
+                    headerStyle: HeaderStyle(
+                      centerHeaderTitle: true,
+                      formatButtonDecoration: BoxDecoration(
+                        color: Colors.pink[200],
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      formatButtonTextStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      formatButtonShowsNext: false,
+                    ),
+                    startingDayOfWeek: StartingDayOfWeek.sunday,
+                    onDaySelected: (date, events) {
+                      setState(() {
+                        _selectedEvents = events;
+                      });
+                    },
+                    builders: CalendarBuilders(
+                      selectedDayBuilder: (context, date, events) => 
+                      Container(
+                        margin: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle
+                        ),
+                        child: Text(date.day.toString(),
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                        )
+                      ),
+                      todayDayBuilder: (context, date, events) =>
+                      Container(
+                        margin: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.red[200],
+                          shape: BoxShape.circle
+                        ),
+                        child: Text(date.day.toString(),
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                        )
+                      )
+                    ),
+                    calendarController: _controller,
+                  ),
+                  ..._selectedEvents.map((event) => ListTile(
+                        title: Text(event.title),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => EventDetailsAdmin(
+                                        event: event,
+                    )));
+                    },
+                  )),
+                ],
+              ),
+            );
+          }),
         );
       }
     );
   }
-  Widget view(todo) {
-    // Usa el objeto Todo para crear nuestra UI
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(todo.title),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            Text(todo.description),
-            RaisedButton(
-              child: Text ('Borrar'),
-              onPressed: () async {
-                Navigator.pop(context);
-              }
-            )
-          ],
-        )
-      ),
-    );
-  }
 }
-
 

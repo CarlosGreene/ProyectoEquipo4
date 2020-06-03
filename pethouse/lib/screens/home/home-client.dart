@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-//import 'package:pethouse/screens/home/home-admin.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:pethouse/services/database.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:pethouse/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:pethouse/models/event.dart';
+import 'package:pethouse/red/event_firestore_service.dart';
+import 'package:pethouse/screens/home/view_event.dart';
 
 class HomeClient extends StatefulWidget {
 
@@ -21,29 +23,24 @@ class _HomeClientState extends State<HomeClient> {
   
   CalendarController _controller;
   Map<DateTime,List<dynamic>> _events;
+  List<dynamic>_selectedEvents;
   @override
   void initState() {
     super.initState();
     _controller = CalendarController();
     _events = {};
+    _selectedEvents = [];
   }
-
-  Map<String,dynamic> encodeMap(Map<DateTime,dynamic> map){
-    Map<String,dynamic> newMap = {};
-    map.forEach((key,value) {
-      newMap[key.toString()] = map[key];
+  Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
+    Map<DateTime, List<dynamic>> data = {};
+    allEvents.forEach((event) {
+      DateTime date = DateTime(
+          event.eventDate.year, event.eventDate.month, event.eventDate.day, 12);
+      if (data[date] == null) data[date] = [];
+      data[date].add(event);
     });
-    return newMap;
+    return data;
   }
-
-  Map<DateTime,dynamic> decodeMap(Map<String,dynamic> map){
-    Map<DateTime,dynamic> newMap = {};
-    map.forEach((key,value) {
-      newMap[DateTime.parse(key)] = map[key];
-    });
-    return newMap;
-  }
-
   @override
   Widget build(BuildContext context) {
     int _selectDrawerItem = 0;
@@ -150,8 +147,8 @@ class _HomeClientState extends State<HomeClient> {
                     trailing: new Icon(Icons.pageview),
                     selected: (5 == _selectDrawerItem),
                     onTap: () async {
-                      await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.client);
-                      await widget.changeHome();
+                      await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.admin);
+                      //await widget.changeHome();
                     }
                   ),
                   new ListTile(
@@ -170,75 +167,102 @@ class _HomeClientState extends State<HomeClient> {
                 ],
             ),
           ),
-          body:SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                TableCalendar(
-                  events: _events,
-                  initialCalendarFormat: CalendarFormat.month,
-                  calendarStyle: CalendarStyle(
-                    todayColor: Colors.red[300],
-                    selectedColor: Theme.of(context).primaryColor,
-                    todayStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                      color: Colors.white,
-                    )
-                  ),
-                  headerStyle: HeaderStyle(
-                    centerHeaderTitle: true,
-                    formatButtonDecoration: BoxDecoration(
-                      color: Colors.red[300],
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    formatButtonTextStyle: TextStyle(
-                      color: Colors.white,
-                    ),
-                    formatButtonShowsNext: false,
-                  ),
-                  onDaySelected: (date, events){
-                    print(date.toIso8601String());
-                  },
-                  builders: CalendarBuilders(
-                    selectedDayBuilder: (context, date, events) => 
-                    Container(
-                      margin: const EdgeInsets.all(4.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        shape: BoxShape.circle
-                      ),
-                      child: Text(date.day.toString(),
-                      style: TextStyle(
-                        color: Colors.white
-                      ),
+          body: StreamBuilder<List<EventModel>>(
+          stream: eventDBS.streamList(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<EventModel> allEvents = snapshot.data;
+              if (allEvents.isNotEmpty) {
+                _events = _groupEvents(allEvents);
+              } else {
+                _events = {};
+                _selectedEvents = [];
+              }
+            }
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TableCalendar(
+                    events: _events,
+                    initialCalendarFormat: CalendarFormat.month,
+                    calendarStyle: CalendarStyle(
+                      todayColor: Colors.red[300],
+                      selectedColor: Theme.of(context).primaryColor,
+                      todayStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                        color: Colors.white,
                       )
                     ),
-                    todayDayBuilder: (context, date, events) =>
-                    Container(
-                      margin: const EdgeInsets.all(4.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.red[200],
-                        shape: BoxShape.circle
+                    headerStyle: HeaderStyle(
+                      centerHeaderTitle: true,
+                      formatButtonDecoration: BoxDecoration(
+                        color: Colors.pink[200],
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
-                      child: Text(date.day.toString(),
-                      style: TextStyle(
-                        color: Colors.white
+                      formatButtonTextStyle: TextStyle(
+                        color: Colors.white,
                       ),
+                      formatButtonShowsNext: false,
+                    ),
+                    startingDayOfWeek: StartingDayOfWeek.sunday,
+                    onDaySelected: (date, events) {
+                      setState(() {
+                        _selectedEvents = events;
+                      });
+                    },
+                    builders: CalendarBuilders(
+                      selectedDayBuilder: (context, date, events) => 
+                      Container(
+                        margin: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle
+                        ),
+                        child: Text(date.day.toString(),
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                        )
+                      ),
+                      todayDayBuilder: (context, date, events) =>
+                      Container(
+                        margin: const EdgeInsets.all(4.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: Colors.red[200],
+                          shape: BoxShape.circle
+                        ),
+                        child: Text(date.day.toString(),
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                        )
                       )
-                    )
+                    ),
+                    calendarController: _controller,
                   ),
-                  calendarController: _controller,
-                )
-              ],
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: (){},
-          ),
+                  ..._selectedEvents.map((event) => ListTile(
+                        title: Text(event.title),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => EventDetailsPage(
+                                        event: event,
+                    )));
+                    },
+                  )),
+                ],
+              ),
+            );
+          }),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => Navigator.pushNamed(context, 'add_event'),
+      ),
         );
       }
     );
