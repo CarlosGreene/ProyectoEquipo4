@@ -242,14 +242,16 @@ class _HomeClientState extends State<HomeClient> {
                     calendarController: _controller,
                   ),
                   ..._selectedEvents.map((event) => ListTile(
-                        title: Text(event.title),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => EventDetailsPage(
-                                        event: event,
-                    )));
+                    title: Text(event.title),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EventDetailsPage(
+                            event: event,
+                          ) 
+                        ) 
+                      );
                     },
                   )),
                 ],

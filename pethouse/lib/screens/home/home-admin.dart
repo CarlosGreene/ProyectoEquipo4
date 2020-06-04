@@ -7,13 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:pethouse/services/database.dart';
 import 'package:pethouse/models/event.dart';
 import 'package:pethouse/red/event_firestore_service.dart';
-
-class Todo {
-  final String title;
-  final String description;
-
-  Todo(this.title, this.description);
-}
+import 'package:pethouse/screens/home/drawer_admin.dart';
 
 class HomeAdmin extends StatefulWidget {
 
@@ -27,15 +21,6 @@ class _HomeAdminState extends State<HomeAdmin> {
 
   final AuthService _auth = AuthService();
 
-  final todos = List<Todo>.generate(
-  20,
-  (i) => Todo(
-        'Todo $i',
-        'Una descripción de lo que se debe hacer para Todo $i',
-      ),
-  );
-
-
   CalendarController _controller;
   Map<DateTime,List<dynamic>> _events;
   List<dynamic>_selectedEvents;
@@ -45,6 +30,11 @@ class _HomeAdminState extends State<HomeAdmin> {
     _controller = CalendarController();
     _events = {};
     _selectedEvents = [];
+  }
+  void signOut(){
+    setState(() async {
+      await _auth.signOut();
+    });
   }
   Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
     Map<DateTime, List<dynamic>> data = {};
@@ -58,13 +48,6 @@ class _HomeAdminState extends State<HomeAdmin> {
   }
   @override
   Widget build(BuildContext context) {
-    int _selectDrawerItem = 0;
-
-    _onSelectedItem(int pos){
-      Navigator.of(context).pop();
-      setState(() {
-      });
-    }
 
     final user = Provider.of<User>(context);
 
@@ -83,80 +66,7 @@ class _HomeAdminState extends State<HomeAdmin> {
               textAlign: TextAlign.right
             ),
           ),
-          drawer: new Drawer(
-              child: new ListView(
-                children: <Widget>[
-                  new UserAccountsDrawerHeader(
-                    accountName: new Text(userData.name,
-                      style: TextStyle(
-                        color: Colors.white
-                      ),
-                    ),
-                    accountEmail: new Text(userData.email,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: new NetworkImage("https://i.pinimg.com/originals/58/f6/9a/58f69a16b34e9864353070c745bd73b2.jpg")
-                      )
-                    ),
-                  ),
-                  new ListTile(
-                    title: new Text('Calendario',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.calendar_today),
-                    selected: (1 == _selectDrawerItem),
-                    onTap: (){
-                      _onSelectedItem(0);
-                    },
-                  ),
-                  new ListTile(
-                    title: new Text('Mensajes',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.message),
-                    selected: (2 == _selectDrawerItem),
-                    onTap: (){
-                      _onSelectedItem(0);
-                    },
-                  ),
-                  new ListTile(
-                    title: new Text('Volver a Menú de Usuario',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.supervised_user_circle),
-                    selected: (3 == _selectDrawerItem),
-                    onTap: (){
-                      _onSelectedItem(0);
-                    },
-                  ),
-                  new ListTile(
-                    title: new Text('Cerrar Sesión',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.exit_to_app),
-                    selected: (4 ==_selectDrawerItem),
-                    onTap: () async {
-                      await _auth.signOut();
-                      _onSelectedItem(0);
-                    },
-                  ),
-                ],
-            ),
-          ),
+          drawer: DrawerAdmin(signOut: signOut),
           body: StreamBuilder<List<EventModel>>(
           stream: eventDBS.streamList(),
           builder: (context, snapshot) {
@@ -235,14 +145,16 @@ class _HomeAdminState extends State<HomeAdmin> {
                     calendarController: _controller,
                   ),
                   ..._selectedEvents.map((event) => ListTile(
-                        title: Text(event.title),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => EventDetailsAdmin(
-                                        event: event,
-                    )));
+                    title: Text(event.title),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EventDetailsAdmin(
+                            event: event,
+                          )
+                        )
+                      );
                     },
                   )),
                 ],
