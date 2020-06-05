@@ -42,7 +42,6 @@ class _LogAdminState extends State<LogAdmin> {
                   ),
                   onPressed: () async {
                     await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.admin);
-                    //await widget.changeHome();
                   }, 
                 ),
               ],
@@ -54,7 +53,7 @@ class _LogAdminState extends State<LogAdmin> {
                 child: Column(
                   children: <Widget>[
                     SizedBox(height: 12.0),
-                    Text('Introduce la clave para entrar como Administrador. Cuando le des a verificar sal, si la interfaz cambió, significa que entraste a administrador'),
+                    Text('Introduce la clave para entrar como Administrador'),
                     SizedBox(height: 20.0),
                     TextFormField(
                       decoration: textInputDecoration.copyWith(hintText: 'Clave para administrador'),
