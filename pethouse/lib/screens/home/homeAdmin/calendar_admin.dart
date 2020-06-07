@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:pethouse/screens/home/view_admin.dart';
+import 'package:pethouse/screens/home/homeAdmin/view_admin.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:pethouse/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:pethouse/services/database.dart';
 import 'package:pethouse/models/event.dart';
-import 'package:pethouse/red/event_firestore_service.dart';
-import 'package:pethouse/screens/home/drawer_admin.dart';
+import 'package:pethouse/services/eventDB.dart';
+import 'package:pethouse/screens/home/homeAdmin/drawer_admin.dart';
 
-class HomeAdmin extends StatefulWidget {
+class CalendarAdmin extends StatefulWidget {
 
   final Function goAdmin;
-  HomeAdmin({ this.goAdmin });
+  CalendarAdmin({ this.goAdmin });
   @override
-  _HomeAdminState createState() => _HomeAdminState();
+  _CalendarAdminState createState() => _CalendarAdminState();
 }
 
-class _HomeAdminState extends State<HomeAdmin> {
+class _CalendarAdminState extends State<CalendarAdmin> {
 
   final AuthService _auth = AuthService();
+  
 
   CalendarController _controller;
   Map<DateTime,List<dynamic>> _events;
@@ -31,11 +32,13 @@ class _HomeAdminState extends State<HomeAdmin> {
     _events = {};
     _selectedEvents = [];
   }
-  void signOut(){
+
+ void signOut(){
     setState(() async {
       await _auth.signOut();
     });
   }
+  
   Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
     Map<DateTime, List<dynamic>> data = {};
     allEvents.forEach((event) {
@@ -54,7 +57,6 @@ class _HomeAdminState extends State<HomeAdmin> {
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot) {
-        UserData userData = snapshot.data;
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -145,16 +147,14 @@ class _HomeAdminState extends State<HomeAdmin> {
                     calendarController: _controller,
                   ),
                   ..._selectedEvents.map((event) => ListTile(
-                    title: Text(event.title),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => EventDetailsAdmin(
-                            event: event,
-                          )
-                        )
-                      );
+                        title: Text(event.title),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => EventDetailsAdmin(
+                                        event: event,
+                    )));
                     },
                   )),
                 ],
@@ -166,4 +166,3 @@ class _HomeAdminState extends State<HomeAdmin> {
     );
   }
 }
-

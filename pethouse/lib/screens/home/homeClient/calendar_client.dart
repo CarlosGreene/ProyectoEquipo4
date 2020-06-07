@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pethouse/screens/home/homeClient/drawer_client.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:pethouse/services/database.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -6,10 +7,13 @@ import 'package:pethouse/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:pethouse/models/event.dart';
 import 'package:pethouse/red/event_firestore_service.dart';
-import 'package:pethouse/screens/home/view_event.dart';
+import 'package:pethouse/screens/home/homeClient/view_event.dart';
 
 class HomeClient extends StatefulWidget {
   
+  final Function changePageClient;
+  HomeClient({ this.changePageClient });
+
   @override
   _HomeClientState createState() => _HomeClientState();
 }
@@ -28,6 +32,19 @@ class _HomeClientState extends State<HomeClient> {
     _events = {};
     _selectedEvents = [];
   }
+
+  void signOut(){
+    setState(() async {
+      await _auth.signOut();
+    });
+  }
+
+  void changePage(int page){
+    setState(() async {
+      await widget.changePageClient(page);
+    });
+  }
+
   Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
     Map<DateTime, List<dynamic>> data = {};
     allEvents.forEach((event) {
@@ -40,20 +57,12 @@ class _HomeClientState extends State<HomeClient> {
   }
   @override
   Widget build(BuildContext context) {
-    int _selectDrawerItem = 0;
-
-    _onSelectedItem(int pos){
-      Navigator.of(context).pop();
-      setState(() {
-      });
-    }
 
     final user = Provider.of<User>(context);
 
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot) {
-        UserData userData = snapshot.data;
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -65,105 +74,7 @@ class _HomeClientState extends State<HomeClient> {
               textAlign: TextAlign.right
             ),
           ),
-          drawer: new Drawer(
-              child: new ListView(
-                children: <Widget>[
-                  new UserAccountsDrawerHeader(
-                    accountName: new Text(userData.name,
-                      style: TextStyle(
-                        color: Colors.white
-                      ),
-                    ),
-                    accountEmail: new Text(userData.email,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15.0
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      image: new DecorationImage(
-                        fit: BoxFit.fill,
-                        image: new NetworkImage("https://i.pinimg.com/originals/58/f6/9a/58f69a16b34e9864353070c745bd73b2.jpg")
-                      )
-                    ),
-                  ),
-                  new ListTile(
-                    title: new Text('Calendario',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.calendar_today),
-                    selected: (1 == _selectDrawerItem),
-                    onTap: (){
-                      _onSelectedItem(0);
-                    },
-                  ),
-                  new ListTile(
-                    title: new Text('Mensajes',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.message),
-                    selected: (2 == _selectDrawerItem),
-                    onTap: (){
-                      _onSelectedItem(0);
-                    },
-                  ),
-                  new ListTile(
-                    title: new Text('Acerca de nosotros',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.person),
-                    selected: (3 == _selectDrawerItem),
-                    onTap: (){
-                      _onSelectedItem(0);
-                    }
-                  ),
-                  new ListTile(
-                    title: new Text('Necesito ayuda',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.help),
-                    selected: (4 == _selectDrawerItem),
-                    onTap: (){
-                      _onSelectedItem(0);
-                    },
-                  ),
-                  new ListTile(
-                    title: new Text('Iniciar como Administrador',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.pageview),
-                    selected: (5 == _selectDrawerItem),
-                    onTap: () async {
-                      await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.admin);
-                      //await widget.changeHome();
-                    }
-                  ),
-                  new ListTile(
-                    title: new Text('Cerrar Sesión',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.exit_to_app),
-                    selected: (6 ==_selectDrawerItem),
-                    onTap: () async {
-                      await _auth.signOut();
-                      _onSelectedItem(0);
-                    },
-                  ),
-                ],
-            ),
-          ),
+          drawer: DrawerClient(signOut: signOut, changePage: changePage),
           body: StreamBuilder<List<EventModel>>(
           stream: eventDBS.streamList(),
           builder: (context, snapshot) {

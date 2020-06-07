@@ -15,6 +15,7 @@ class DrawerAdmin extends StatefulWidget {
 }
 
 class _DrawerAdminState extends State<DrawerAdmin> {
+
   @override
   Widget build(BuildContext context) {
 
@@ -79,27 +80,20 @@ class _DrawerAdminState extends State<DrawerAdmin> {
                     },
                   ),
                   new ListTile(
-                    title: new Text('Volver a Menú de Usuario',
-                      style: TextStyle(
-                        fontSize: 20.0
-                      ),
-                    ),
-                    trailing: new Icon(Icons.supervised_user_circle),
-                    selected: (3 == _selectDrawerItem),
-                    onTap: () async {
-                      await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.admin);
-                    },
-                  ),
-                  new ListTile(
                     title: new Text('Cerrar Sesión',
                       style: TextStyle(
                         fontSize: 20.0
                       ),
                     ),
                     trailing: new Icon(Icons.exit_to_app),
-                    selected: (4 ==_selectDrawerItem),
-                    onTap: () async {
+                    selected: (3 ==_selectDrawerItem),
+                    onTap: () async{
                       await widget.signOut();
+                      await DatabaseService (uid: user.uid).updateUserData(
+                        userData.name, 
+                        userData.email, 
+                        userData.password, 
+                        !userData.admin);
                       _onSelectedItem(0);
                     },
                   ),

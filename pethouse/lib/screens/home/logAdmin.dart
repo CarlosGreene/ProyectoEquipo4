@@ -28,13 +28,13 @@ class _LogAdminState extends State<LogAdmin> {
       builder: (context, snapshot) {
         UserData userData = snapshot.data;
         return Scaffold(
-          backgroundColor: Colors.brown[50],
+          backgroundColor: Colors.orange[100],
             appBar: AppBar(
               title: Text('Entrar como administrador'),
-              backgroundColor: Colors.brown[400],
+              backgroundColor: Colors.orange[400],
               actions: <Widget>[
                 FlatButton.icon(
-                  icon: Icon(Icons.pageview),
+                  icon: Icon(Icons.keyboard_backspace),
                   label: Text('Regresar',
                     style: TextStyle(
                       color: Colors.white
@@ -42,6 +42,7 @@ class _LogAdminState extends State<LogAdmin> {
                   ),
                   onPressed: () async {
                     await DatabaseService (uid: user.uid).updateUserData(userData.name, userData.email, userData.password, !userData.admin);
+                    //await widget.changeHome();
                   }, 
                 ),
               ],
@@ -53,7 +54,7 @@ class _LogAdminState extends State<LogAdmin> {
                 child: Column(
                   children: <Widget>[
                     SizedBox(height: 12.0),
-                    Text('Introduce la clave para entrar como Administrador'),
+                    Text('Introduce la clave para entrar como Administrador. Esta clave te sera proporcionada por el encargado de la respectiva ONG y te otorgara acceso a las funciones de administrador.'),
                     SizedBox(height: 20.0),
                     TextFormField(
                       decoration: textInputDecoration.copyWith(hintText: 'Clave para administrador'),

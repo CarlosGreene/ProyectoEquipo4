@@ -1,5 +1,4 @@
 import 'package:firebase_helpers/firebase_helpers.dart';
-import 'package:flutter/cupertino.dart';
 
 class EventModel extends DatabaseItem{
   final String id;
