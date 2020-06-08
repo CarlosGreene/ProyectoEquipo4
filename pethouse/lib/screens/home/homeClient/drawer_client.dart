@@ -49,10 +49,16 @@ class _DrawerClientState extends State<DrawerClient> {
                         fontSize: 15.0
                       ),
                     ),
+                    currentAccountPicture: new GestureDetector(
+                      onTap: () => print("imagen actual"),
+                      child: new CircleAvatar(
+                        backgroundImage: AssetImage("assets/DefaultAvatar.jpg")  
+                        ),
+                      ),
                     decoration: BoxDecoration(
                       image: new DecorationImage(
                         fit: BoxFit.fill,
-                        image: new NetworkImage("https://i.pinimg.com/originals/58/f6/9a/58f69a16b34e9864353070c745bd73b2.jpg")
+                        image: AssetImage("assets/Banner.jpg")
                       )
                     ),
                   ),
@@ -77,7 +83,7 @@ class _DrawerClientState extends State<DrawerClient> {
                     trailing: new Icon(Icons.message),
                     selected: (2 == _selectDrawerItem),
                     onTap: (){
-                      _onSelectedItem(0);
+                      _onSelectedItem(1);
                     },
                   ),
                   new ListTile(

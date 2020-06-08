@@ -12,7 +12,8 @@ import 'package:pethouse/screens/home/homeAdmin/drawer_admin.dart';
 class CalendarAdmin extends StatefulWidget {
 
   final Function goAdmin;
-  CalendarAdmin({ this.goAdmin });
+  final Function changePageAdmin;
+  CalendarAdmin({ this.goAdmin, this.changePageAdmin });
   @override
   _CalendarAdminState createState() => _CalendarAdminState();
 }
@@ -36,6 +37,12 @@ class _CalendarAdminState extends State<CalendarAdmin> {
  void signOut(){
     setState(() async {
       await _auth.signOut();
+    });
+  }
+
+   void changePage(int page){
+    setState(() async {
+      await widget.changePageAdmin(page);
     });
   }
   
@@ -68,7 +75,7 @@ class _CalendarAdminState extends State<CalendarAdmin> {
               textAlign: TextAlign.right
             ),
           ),
-          drawer: DrawerAdmin(signOut: signOut),
+          drawer: DrawerAdmin(signOut: signOut, changePage: changePage),
           body: StreamBuilder<List<EventModel>>(
           stream: eventDBS.streamList(),
           builder: (context, snapshot) {

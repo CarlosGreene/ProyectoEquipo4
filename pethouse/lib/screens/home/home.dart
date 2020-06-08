@@ -6,6 +6,8 @@ import 'package:pethouse/screens/home/homeClient/calendar_client.dart';
 import 'package:pethouse/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:pethouse/services/database.dart';
+import 'package:pethouse/screens/home/homeClient/messages_client.dart';
+import 'package:pethouse/screens/home/homeAdmin/messages_admin.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -43,6 +45,10 @@ class _HomeState extends State<Home> {
             case  0: 
               return HomeClient(changePageClient: changePageClient);
               break;
+            
+            case 1:
+              return MessagesClient(changePageClient: changePageClient);
+              break;
 
             case 2:
               return AboutUs(changePageClient: changePageClient);
@@ -54,7 +60,17 @@ class _HomeState extends State<Home> {
         } else if (aux==true) {
           return LogAdmin(goAdmin: goAdmin);
         } else {
-          return CalendarAdmin(goAdmin: goAdmin);
+          switch (pageAdmin) {
+            case 0:
+              return CalendarAdmin(goAdmin: goAdmin, changePageAdmin: changePageAdmin);
+              break;
+
+            case 1:
+              return MessagesAdmin(changePageAdmin: changePageAdmin);
+              break;
+
+            default:
+          }
         }
       }
     );

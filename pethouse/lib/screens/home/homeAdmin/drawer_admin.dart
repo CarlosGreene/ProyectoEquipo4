@@ -6,9 +6,8 @@ import 'package:pethouse/services/database.dart';
 class DrawerAdmin extends StatefulWidget {
 
   final Function signOut;
-  final String name;
-  final String email;
-  DrawerAdmin ({ this.signOut, this.name, this.email });
+  final Function changePage;
+  DrawerAdmin ({ this.signOut, this.changePage });
 
   @override
   _DrawerAdminState createState() => _DrawerAdminState();
@@ -22,8 +21,10 @@ class _DrawerAdminState extends State<DrawerAdmin> {
     int _selectDrawerItem = 0;
 
     _onSelectedItem(int pos){
+      _selectDrawerItem = pos;
       Navigator.of(context).pop();
-      setState(() {
+      setState(() async{
+        await widget.changePage(_selectDrawerItem);
       });
     }
 
@@ -48,10 +49,16 @@ class _DrawerAdminState extends State<DrawerAdmin> {
                         fontSize: 15.0
                       ),
                     ),
+                    currentAccountPicture: new GestureDetector(
+                      onTap: () => print("imagen actual"),
+                      child: new CircleAvatar(
+                        backgroundImage: AssetImage("assets/DefaultAvatar.jpg")
+                        ),
+                      ),
                     decoration: BoxDecoration(
                       image: new DecorationImage(
                         fit: BoxFit.fill,
-                        image: new NetworkImage("https://i.pinimg.com/originals/58/f6/9a/58f69a16b34e9864353070c745bd73b2.jpg")
+                        image: AssetImage("assets/Banner.jpg")
                       )
                     ),
                   ),
@@ -76,7 +83,7 @@ class _DrawerAdminState extends State<DrawerAdmin> {
                     trailing: new Icon(Icons.message),
                     selected: (2 == _selectDrawerItem),
                     onTap: (){
-                      _onSelectedItem(0);
+                      _onSelectedItem(1);
                     },
                   ),
                   new ListTile(
