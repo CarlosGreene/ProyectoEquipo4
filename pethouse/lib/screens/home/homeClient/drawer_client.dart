@@ -107,7 +107,7 @@ class _DrawerClientState extends State<DrawerClient> {
                     trailing: new Icon(Icons.help),
                     selected: (4 == _selectDrawerItem),
                     onTap: (){
-                      _onSelectedItem(0);
+                      _onSelectedItem(3);
                     },
                   ),
                   new ListTile(

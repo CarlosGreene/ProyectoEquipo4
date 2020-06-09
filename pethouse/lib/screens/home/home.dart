@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:pethouse/services/database.dart';
 import 'package:pethouse/screens/home/homeClient/messages_client.dart';
 import 'package:pethouse/screens/home/homeAdmin/messages_admin.dart';
+import 'package:pethouse/screens/home/homeClient/need_help.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -52,6 +53,10 @@ class _HomeState extends State<Home> {
 
             case 2:
               return AboutUs(changePageClient: changePageClient);
+              break;
+
+            case 3:
+              return NeedHelp(changePageClient: changePageClient);
               break;
 
             default:
