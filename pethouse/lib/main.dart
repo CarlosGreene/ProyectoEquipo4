@@ -1,6 +1,6 @@
-//import 'package:pethouse/screens/home/home-client.dart';
+// Main: Envia al usuario a Wrapper cuando inicia el sistema
+
 import 'package:pethouse/screens/home/homeClient/add_event.dart';
-//import 'package:pethouse/screens/home/view_event.dart';
 import 'package:pethouse/screens/home/wrapper.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:flutter/material.dart';

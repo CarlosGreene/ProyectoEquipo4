@@ -1,11 +1,12 @@
+//Register: modulo que se encarga registrar una cuenta de cliente o de administrador 
 import 'package:flutter/material.dart';
-//import 'package:pethouse/screens/home/home-client.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:pethouse/shared/constants.dart';
 import 'package:pethouse/shared/loading.dart';
 
 class Register extends StatefulWidget {
 
+  //Función toggleView se ubica en authenticate.dart
   final Function toggleView;
   Register({this.toggleView});
 
@@ -34,6 +35,7 @@ class _RegisterState extends State<Register> {
           ),
         ),
         actions: <Widget>[
+          //Botón que llama la función toggleView
           FlatButton.icon(
             icon: Icon(Icons.person),
             label: Text('Iniciar sesión',
@@ -54,6 +56,7 @@ class _RegisterState extends State<Register> {
           child: Column(
             children: <Widget> [
               SizedBox(height: 20.0,),
+              //El usuario introduce su nombre completo
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Nombre completo'),
                 validator: (val) => val.isEmpty ? 'Escribe tu nombre completo':  null,
@@ -62,6 +65,7 @@ class _RegisterState extends State<Register> {
                 },
               ),
               SizedBox(height: 20.0,),
+              //El usuario introduce su correo
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Correo'),
                 validator: (val) => val.isEmpty ? 'Escribe un correo': null,
@@ -70,15 +74,18 @@ class _RegisterState extends State<Register> {
                 },
               ),
               SizedBox(height: 20.0),
+              //El usuario introduce su contraseña
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Contraseña'),
                 obscureText: true,
+                //Verifica que la contraseña contenga mínimo 6 caracteres
                 validator: (val) => val.length < 6 ? 'Escribe una contraseña con más de 6 caractéres': null,
                 onChanged:(val) {
                   setState(() => password = val);
                 }
               ),
               SizedBox(height: 20.0),
+              //Botón para registrarse como cliente
               RaisedButton(
                 color: Colors.pink[400],
                 child: Text(
@@ -88,6 +95,7 @@ class _RegisterState extends State<Register> {
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
                     setState(() => loading = true);
+                    //Llama la funcion signInWithEmailAndPassword ubicada en auth.dart para registrar cuenta como cliente
                     dynamic result = await _auth.registerWithNameEmailAndPasswordClient(name, email, password); 
                     if(result == null){
                       setState(() { 
@@ -99,6 +107,7 @@ class _RegisterState extends State<Register> {
                 },               
               ),
               SizedBox(height: 20.0),
+              //Botón para registrarse como adminstrador
               RaisedButton(
                 color: Colors.pink[400],
                 child: Text(
@@ -108,6 +117,7 @@ class _RegisterState extends State<Register> {
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
                     setState(() => loading = true);
+                    //Llama la funcion signInWithEmailAndPassword ubicada en auth.dart para registrar cuenta como cliente
                     dynamic result = await _auth.registerWithEmailAndPasswordAdmin(name, email, password); 
                     if(result == null){
                       setState(() { 

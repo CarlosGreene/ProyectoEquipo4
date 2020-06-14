@@ -1,3 +1,4 @@
+//database: Modulo que se encarga de guardar los datos de los usarios registrados, como el nombre, correo, etc.
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pethouse/models/client.dart';
 import 'package:pethouse/models/user.dart';

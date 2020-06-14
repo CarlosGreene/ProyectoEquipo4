@@ -41,7 +41,7 @@ class _HomeState extends State<Home> {
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot){
         UserData userData = snapshot.data;
-        if (userData.admin==true) { 
+        if (userData.admin==false) { 
           switch (pageClient) {
             case  0: 
               return HomeClient(changePageClient: changePageClient);

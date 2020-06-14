@@ -1,3 +1,4 @@
+// authenticate: modulo que te envia a iniciar sesión o registrarse
 import 'package:flutter/material.dart';
 import 'package:pethouse/screens/authenticate/register.dart';
 import 'package:pethouse/screens/authenticate/sign_in.dart';
@@ -9,15 +10,17 @@ class Authenticate extends StatefulWidget {
 
 class _AuthenticateState extends State<Authenticate> {
 
-  bool showSinIn = true;
+  bool showSignIn = true;
+  //toggleView: Función que cambia el valor de showSignIn
   void toggleView() {
-    setState(() => showSinIn = !showSinIn);
+    setState(() => showSignIn = !showSignIn);
   }
 
   @override
   Widget build(BuildContext context) {
-    if (showSinIn){
-      return SingIn(toggleView: toggleView);
+    //Dependiendo del valor de showSignIn, te envia a SignIn o a Register
+    if (showSignIn){
+      return SignIn(toggleView: toggleView);
     } else {
       return Register(toggleView: toggleView);
     }

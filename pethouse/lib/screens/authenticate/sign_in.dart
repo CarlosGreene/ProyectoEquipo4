@@ -1,19 +1,21 @@
+//SignIn: Modulo que se encarga de iniciar sesión
 import 'package:flutter/material.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:pethouse/shared/constants.dart';
 import 'package:pethouse/shared/loading.dart';
 
-class SingIn extends StatefulWidget {
+class SignIn extends StatefulWidget {
 
+  //Función toggleView se ubica en authenticate.dart
   final Function toggleView;
-  SingIn({ this.toggleView });
+  SignIn({ this.toggleView });
 
 
   @override
   _SingInState createState() => _SingInState();
 }
 
-class _SingInState extends State<SingIn> {
+class _SingInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
@@ -33,6 +35,7 @@ class _SingInState extends State<SingIn> {
           ),
         ),
         actions: <Widget>[
+          //Botón que llama la función toggleView
           FlatButton.icon(
             icon: Icon(Icons.person),
             label: Text('Registrarse',
@@ -53,6 +56,7 @@ class _SingInState extends State<SingIn> {
           child: Column(
             children: <Widget> [
               SizedBox(height: 20.0,),
+              //El usuario introduce su correo
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Correo'),
                 validator: (val) => val.isEmpty ? 'Escribe un correo': null,
@@ -61,8 +65,10 @@ class _SingInState extends State<SingIn> {
                 },
               ),
               SizedBox(height: 20.0),
+              //El usuario introduce su contraseña
               TextFormField(
                 decoration: textInputDecoration.copyWith(hintText: 'Contaseña'),
+                //Verifica que la contraseña contenga mínimo 6 caracteres
                 validator: (val) => val.length < 6 ? 'Escribe una contraseña con más de 6 caractéres': null,
                 obscureText: true,
                 onChanged:(val) {
@@ -70,6 +76,7 @@ class _SingInState extends State<SingIn> {
                 }
               ),
               SizedBox(height: 20.0),
+              //Botón de iniciar sesión
               RaisedButton(
                 color: Colors.pink[400],
                 child: Text(
@@ -81,6 +88,7 @@ class _SingInState extends State<SingIn> {
                     setState(() { 
                       loading = true; 
                     });
+                    //Llama la funcion signInWithEmailAndPassword ubicada en auth.dart para buscar la cuenta registrada e iniciar sesión
                     dynamic result = await _auth.signInWithEmailAndPassword(email, password); 
                     if(result == null){
                       setState(() { 

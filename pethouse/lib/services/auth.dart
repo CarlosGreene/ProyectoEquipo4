@@ -1,3 +1,4 @@
+//auth: Modulo que llama las funciones de Firebase para iniciar sesión, registrarse como cliente o administrador y cerrar sesión
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pethouse/models/user.dart';
 import 'package:pethouse/services/database.dart';
@@ -35,7 +36,7 @@ class AuthService {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
-      await DatabaseService(uid: user.uid).updateUserData(name, email, password, false);
+      await DatabaseService(uid: user.uid).updateUserData(name, email, password, true);
       return _userFormFirebaseUser(user);
     }catch(e){
       print(e.toString());
@@ -49,7 +50,7 @@ class AuthService {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user = result.user;
 
-      await DatabaseService(uid: user.uid).updateUserData(name, email, password, true);
+      await DatabaseService(uid: user.uid).updateUserData(name, email, password, false);
       return _userFormFirebaseUser(user);
     }catch(e){
       print(e.toString());
