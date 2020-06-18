@@ -1,5 +1,3 @@
-//client_admin: genera una interfaz en forma de tabla de calendario, donde se representan de manera gráfica todos los "eventos" guardados en 
-//la base de datos
 import 'package:flutter/material.dart';
 import 'package:pethouse/screens/home/homeClient/drawer_client.dart';
 import 'package:pethouse/services/auth.dart';
@@ -9,7 +7,7 @@ import 'package:pethouse/models/user.dart';
 import 'package:provider/provider.dart';
 import 'package:pethouse/models/event.dart';
 import 'package:pethouse/services/eventDB.dart';
-import 'package:pethouse/screens/home/homeClient/view_client.dart';
+import 'package:pethouse/screens/home/homeClient/view_event.dart';
 
 class HomeClient extends StatefulWidget {
   

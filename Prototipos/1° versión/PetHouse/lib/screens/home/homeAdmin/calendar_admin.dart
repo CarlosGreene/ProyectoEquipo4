@@ -1,29 +1,27 @@
-//client_admin: genera una interfaz en forma de tabla de calendario, donde se representan de manera gráfica todos los "eventos" guardados en 
-//la base de datos
 import 'package:flutter/material.dart';
-import 'package:pethouse/screens/home/homeClient/drawer_client.dart';
+import 'package:pethouse/screens/home/homeAdmin/view_admin.dart';
 import 'package:pethouse/services/auth.dart';
-import 'package:pethouse/services/database.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:pethouse/models/user.dart';
 import 'package:provider/provider.dart';
+import 'package:pethouse/services/database.dart';
 import 'package:pethouse/models/event.dart';
 import 'package:pethouse/services/eventDB.dart';
-import 'package:pethouse/screens/home/homeClient/view_client.dart';
+import 'package:pethouse/screens/home/homeAdmin/drawer_admin.dart';
 
-class HomeClient extends StatefulWidget {
-  
-  final Function changePageClient;
-  HomeClient({ this.changePageClient });
+class CalendarAdmin extends StatefulWidget {
 
+  final Function goAdmin;
+  CalendarAdmin({ this.goAdmin });
   @override
-  _HomeClientState createState() => _HomeClientState();
+  _CalendarAdminState createState() => _CalendarAdminState();
 }
 
-class _HomeClientState extends State<HomeClient> {
+class _CalendarAdminState extends State<CalendarAdmin> {
 
   final AuthService _auth = AuthService();
   
+
   CalendarController _controller;
   Map<DateTime,List<dynamic>> _events;
   List<dynamic>_selectedEvents;
@@ -35,18 +33,12 @@ class _HomeClientState extends State<HomeClient> {
     _selectedEvents = [];
   }
 
-  void signOut(){
+ void signOut(){
     setState(() async {
       await _auth.signOut();
     });
   }
-
-  void changePage(int page){
-    setState(() async {
-      await widget.changePageClient(page);
-    });
-  }
-
+  
   Map<DateTime, List<dynamic>> _groupEvents(List<EventModel> allEvents) {
     Map<DateTime, List<dynamic>> data = {};
     allEvents.forEach((event) {
@@ -69,14 +61,14 @@ class _HomeClientState extends State<HomeClient> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             title: const Text(
-              'Menú de Usuario',
+              'Menú de Administrador',
               style: TextStyle(
                 color: Colors.white,
               ),
               textAlign: TextAlign.right
             ),
           ),
-          drawer: DrawerClient(signOut: signOut, changePage: changePage),
+          drawer: DrawerAdmin(signOut: signOut),
           body: StreamBuilder<List<EventModel>>(
           stream: eventDBS.streamList(),
           builder: (context, snapshot) {
@@ -155,29 +147,22 @@ class _HomeClientState extends State<HomeClient> {
                     calendarController: _controller,
                   ),
                   ..._selectedEvents.map((event) => ListTile(
-                    title: Text(event.title),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => EventDetailsPage(
-                            event: event,
-                          ) 
-                        ) 
-                      );
+                        title: Text(event.title),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => EventDetailsAdmin(
+                                        event: event,
+                    )));
                     },
                   )),
                 ],
               ),
             );
           }),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => Navigator.pushNamed(context, 'add_event'),
-      ),
         );
       }
     );
   }
 }
-
