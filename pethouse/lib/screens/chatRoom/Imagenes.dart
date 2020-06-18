@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pethouse/screens/home/lista_imagenes.dart';
-import 'package:pethouse/screens/home/photoUpload.dart';
+import 'package:pethouse/screens/chatRoom/lista_imagenes.dart';
+import 'package:pethouse/screens/chatRoom/photoUpload.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class Imagenes extends StatefulWidget {

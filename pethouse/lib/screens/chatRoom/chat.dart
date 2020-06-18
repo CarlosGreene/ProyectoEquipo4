@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:pethouse/screens/home/Imagenes.dart';
+import 'package:pethouse/screens/chatRoom/Imagenes.dart';
 import 'package:pethouse/services/database.dart';
 import 'package:pethouse/shared/constants.dart';
 

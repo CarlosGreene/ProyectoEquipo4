@@ -1,4 +1,4 @@
-import 'package:pethouse/screens/home/chat.dart';
+import 'package:pethouse/screens/chatRoom/chat.dart';
 import 'package:pethouse/shared/constants.dart';
 import 'package:pethouse/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

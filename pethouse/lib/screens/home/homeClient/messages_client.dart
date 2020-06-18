@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pethouse/screens/home/chat.dart';
+import 'package:pethouse/screens/chatRoom/chat.dart';
 import 'package:pethouse/screens/home/homeClient/drawer_client.dart';
-import 'package:pethouse/screens/home/search.dart';
+import 'package:pethouse/screens/chatRoom/search.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:pethouse/services/database.dart';
 import 'package:pethouse/shared/constants.dart';
