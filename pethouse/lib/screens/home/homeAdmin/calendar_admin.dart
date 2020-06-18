@@ -1,3 +1,5 @@
+//genera una interfaz en forma de tabla de calendario, donde se representan de manera gráfica todos los "eventos" guardados en la base de 
+//datos y da acceso a un mapeo con módulos secundarios con propiedades de administrador
 import 'package:flutter/material.dart';
 import 'package:pethouse/screens/home/homeAdmin/view_admin.dart';
 import 'package:pethouse/services/auth.dart';

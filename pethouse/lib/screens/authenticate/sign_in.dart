@@ -1,7 +1,10 @@
-//SignIn: Modulo que se encarga de iniciar sesión
+//SignIn: Modulo que se encarga de iniciar sesión introduciendo los datos de correo y contraseña
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pethouse/services/auth.dart';
+import 'package:pethouse/services/database.dart';
 import 'package:pethouse/shared/constants.dart';
+import 'package:pethouse/shared/helperfunctions.dart';
 import 'package:pethouse/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
@@ -12,14 +15,17 @@ class SignIn extends StatefulWidget {
 
 
   @override
-  _SingInState createState() => _SingInState();
+  _SignInState createState() => _SignInState();
 }
 
-class _SingInState extends State<SignIn> {
+class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService();
+  DatabaseService databaseMethods = new DatabaseService();
   final _formKey = GlobalKey<FormState>();
+  HelperFunctions helperFunctions =new HelperFunctions();
   bool loading = false;
+  QuerySnapshot snapshotUserInfo;
   String email = '', password = '', error = '';
 
   @override
@@ -85,13 +91,22 @@ class _SingInState extends State<SignIn> {
                 ),
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
+                    HelperFunctions.saveUserEmailSharedPreference(email);
+                    databaseMethods.getUserByUserEmail(email).then ((result){
+                      snapshotUserInfo = result;
+                      HelperFunctions.saveUserNameSharedPreference(snapshotUserInfo.documents[0].data["name"]);
+                    });///Guarda las preferencias dentro de sus funciones
+
                     setState(() { 
                       loading = true; 
                     });
                     //Llama la funcion signInWithEmailAndPassword ubicada en auth.dart para buscar la cuenta registrada e iniciar sesión
-                    dynamic result = await _auth.signInWithEmailAndPassword(email, password); 
+                    dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+
                     if(result == null){
-                      setState(() { 
+
+                      HelperFunctions.saveUserLoggedInSharedPreference(true);
+                      setState(() { ///Guarda las preferencias
                         error = 'Por favor, escribe un correo y/o contraseña válidos'; 
                         loading = false;
                       });

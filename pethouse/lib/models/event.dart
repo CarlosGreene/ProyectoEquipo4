@@ -1,3 +1,5 @@
+//event: modelo tipado para los documentos y campos escritos para la colección eventos en la base de datos, que permite el tráfico y 
+//asignación de este entre los distintos módulos funcionales
 import 'package:firebase_helpers/firebase_helpers.dart';
 
 class EventModel extends DatabaseItem{

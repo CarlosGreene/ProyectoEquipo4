@@ -1,3 +1,6 @@
+//view_admin: permite el acceso a los datos proporcionados por el usuario en el formato de evento, para generar una vista sobreescalada de 
+//widgets para así representarlos en una lista en la misma pantalla que la tabla de calendario (todos los datos registrados en el evento)
+//entre las funciones de administrador se encuentra el poder modificar la vista al actualizar o eliminar un documento para su representación
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';

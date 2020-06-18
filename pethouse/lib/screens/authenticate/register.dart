@@ -1,8 +1,10 @@
-//Register: modulo que se encarga registrar una cuenta de cliente o de administrador 
+//Register: modulo que se encarga registrar una cuenta de cliente o de administrador ingresando nombre, correo, y contraseña
 import 'package:flutter/material.dart';
 import 'package:pethouse/services/auth.dart';
 import 'package:pethouse/shared/constants.dart';
+import 'package:pethouse/shared/helperfunctions.dart';
 import 'package:pethouse/shared/loading.dart';
+import '../../services/database.dart';
 
 class Register extends StatefulWidget {
 
@@ -16,11 +18,15 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
 
-  final AuthService _auth = AuthService();
-  final _formKey = GlobalKey<FormState>();
   bool loading = false;
-  
+
+  final AuthService _auth = AuthService();
+  DatabaseService databaseMethods = new DatabaseService();
+  HelperFunctions helperFunctions =new HelperFunctions();
+
+  final _formKey = GlobalKey<FormState>();
   String email = '', password = '', name = '', error = '';
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +100,23 @@ class _RegisterState extends State<Register> {
                 ),
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
+
+                    Map<String, String> userMap = {
+                      "name": name,
+                      "email": email
+                    };
+
+                    HelperFunctions.saveUserNameSharedPreference(name);
+                    HelperFunctions.saveUserEmailSharedPreference(email);
+                    ///Guarda las prefencias de las variables
+
                     setState(() => loading = true);
-                    //Llama la funcion signInWithEmailAndPassword ubicada en auth.dart para registrar cuenta como cliente
-                    dynamic result = await _auth.registerWithNameEmailAndPasswordClient(name, email, password); 
+                    //Llama la funcion signInWithEmailAndPasswordClient ubicada en auth.dart para registrar cuenta como cliente
+                    dynamic result = await _auth.registerWithNameEmailAndPasswordClient(name, email, password);
+
+                    databaseMethods.uploadUserInfo(userMap);
+                    HelperFunctions.saveUserLoggedInSharedPreference(true);
+                    ///Guarda las prefencia
                     if(result == null){
                       setState(() { 
                         error = 'Por favor, escribe un correo válido';
@@ -116,9 +136,22 @@ class _RegisterState extends State<Register> {
                 ),
                 onPressed: () async {
                   if(_formKey.currentState.validate()){
+
+                    Map<String, String> userMap = {
+                      "name": name,
+                      "email": email
+                    };
+
                     setState(() => loading = true);
-                    //Llama la funcion signInWithEmailAndPassword ubicada en auth.dart para registrar cuenta como cliente
-                    dynamic result = await _auth.registerWithEmailAndPasswordAdmin(name, email, password); 
+                    //Llama la funcion signInWithEmailAndPasswordAdmin ubicada en auth.dart para registrar cuenta como adminstrador
+                    dynamic result = await _auth.registerWithEmailAndPasswordAdmin(name, email, password);
+
+                    databaseMethods.uploadUserInfo(userMap);
+                    HelperFunctions.saveUserLoggedInSharedPreference(true);
+                    HelperFunctions.saveUserNameSharedPreference(name);
+                    HelperFunctions.saveUserEmailSharedPreference(email);
+                ///Guarda las prefencias de las variables
+
                     if(result == null){
                       setState(() { 
                         error = 'Por favor, escribe un correo válido';

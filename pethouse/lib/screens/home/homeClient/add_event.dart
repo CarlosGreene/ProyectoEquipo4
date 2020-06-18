@@ -1,3 +1,5 @@
+//add_event: genera un widget que permite el acceso de datos mediante un modelo de evento, para su posterior registro y escritura en la 
+//colección de eventos de la base de datos
 import 'package:pethouse/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:pethouse/red/event_firestore_service.dart';

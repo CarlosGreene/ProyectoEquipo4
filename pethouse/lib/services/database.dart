@@ -53,4 +53,69 @@ class DatabaseService{
     return clientCollection.document(uid).snapshots()
     .map(_userDataFromSnapshot);
   }
+
+  ///Muestra el username para guardarlo dentro de HelperFuntions.
+  getUserByUsername(String name) async {
+    return await Firestore.instance
+        .collection("clients")
+        .where('name', isEqualTo: name)
+        .getDocuments();
+  }
+
+///Muestra el Mapa de clients
+  uploadUserInfo(userMap) async {
+    Firestore.instance.collection("clients")
+        .add(userMap).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+
+///Muestra el Email para guardarlos de HelperFunctions
+  getUserByUserEmail(String email) async {
+    return Firestore.instance
+        .collection("clients")
+        .where("email", isEqualTo: email)
+        .getDocuments();
+    }
+
+
+///Crea un sala de chat dependiendo del id del usuario
+  createChatRoom(String charRoomId, chatRoomMap) {
+    Firestore.instance
+        .collection("ChatRoom")
+        .document(charRoomId)
+        .setData(chatRoomMap)
+        .catchError((e) {
+      print(e);
+    });
+  }
+
+  ///Muestra la lo que escribe el usuario
+  getConversationMessages(String chatRoomId)  async{
+    return await Firestore.instance
+        .collection("ChatRoom")
+        .document(chatRoomId)
+        .collection("chats")
+        .orderBy("time",descending: false)
+        .snapshots();
+  }
+
+///Obtiene las conversaciones de los chats.
+  addConversationMessages(String chatRoomId,messageMap ) {
+    Firestore.instance.collection("ChatRoom")
+        .document(chatRoomId)
+        .collection("chats")
+        .add(messageMap).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  ///Muestra el lista de los chats.
+  getChatRooms(String userName) async {
+    return await Firestore.instance
+        .collection("ChatRoom")
+        .where('users', arrayContains: userName)
+        .snapshots();
+  }
 }

@@ -1,4 +1,4 @@
-// authenticate: modulo que te envia a iniciar sesión o registrarse
+// authenticate: modulo que te envia a iniciar sesión o registrarse 
 import 'package:flutter/material.dart';
 import 'package:pethouse/screens/authenticate/register.dart';
 import 'package:pethouse/screens/authenticate/sign_in.dart';

@@ -10,3 +10,8 @@ const textInputDecoration = InputDecoration(
     borderSide: BorderSide(color: Colors.pink, width: 2.0),
   ),
 );
+
+class Constants{
+
+  static String myName = "";
+}

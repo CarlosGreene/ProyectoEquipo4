@@ -1,3 +1,6 @@
+//view_client:  permite el acceso a los datos proporcionados por el usuario en el formato de evento, para generar una vista sobreescalada de 
+//widgets para así representarlos en una lista en la misma pantalla que la tabla de calendario (únicamente fecha y nombre registrados en el 
+//evento)
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:pethouse/models/event.dart';
