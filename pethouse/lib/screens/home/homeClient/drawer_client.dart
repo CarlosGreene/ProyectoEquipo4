@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pethouse/shared/loading.dart';
 import 'package:provider/provider.dart';
 import 'package:pethouse/models/user.dart';
 import 'package:pethouse/services/database.dart';
@@ -33,7 +34,8 @@ class _DrawerClientState extends State<DrawerClient> {
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot){
-        UserData userData = snapshot.data;
+        if (snapshot.hasData) {
+          UserData userData = snapshot.data;
         return Drawer(
           child: new ListView(
                 children: <Widget>[
@@ -142,6 +144,9 @@ class _DrawerClientState extends State<DrawerClient> {
                 ],
             ),
         );
+        } else {
+          return Loading();
+        }
       }
     );
   }

@@ -40,7 +40,8 @@ class _HomeState extends State<Home> {
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user.uid).userData,
       builder: (context, snapshot){
-        UserData userData = snapshot.data;
+        if (snapshot.hasData) {
+          UserData userData = snapshot.data;
         if (userData.admin==false) { 
           switch (pageClient) {
             case  0: 
@@ -77,6 +78,9 @@ class _HomeState extends State<Home> {
             default:
           }
         }
+        } else {
+        }
+        return LogAdmin();
       }
     );
   }  
